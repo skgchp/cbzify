@@ -1,0 +1,559 @@
+/* CBZify Web Interface Custom Styles */
+
+body {
+    background-color: #f8f9fa;
+    font-size: 16px; /* Ensure base font size is readable */
+    line-height: 1.5; /* Improve readability */
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+}
+
+/* Prevent container overflow issues */
+.container, .container-fluid {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+@media (max-width: 576px) {
+    .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    
+    .col, .col-12, .col-md-3, .col-md-6 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+/* Upload Drop Zone */
+.upload-drop-zone {
+    background-color: #fff;
+    border: 2px dashed #6c757d !important; /* Improved contrast */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #212529; /* High contrast text */
+}
+
+/* Fix contrast for instructions text in normal state */
+.upload-drop-zone p {
+    color: #495057 !important; /* Better contrast than default text-muted */
+}
+
+.upload-drop-zone:hover {
+    border-color: #0056b3 !important; /* Darker blue for better contrast */
+    background-color: #f0f8ff;
+    outline: 2px solid transparent; /* Maintain focus outline space */
+}
+
+/* Fix contrast for heading text in hover/highlighted state */
+.upload-drop-zone:hover h3,
+.upload-drop-zone:hover .h4 {
+    color: #212529 !important; /* Ensure heading stays high contrast */
+}
+
+/* Fix contrast for instructions text in hover state */
+.upload-drop-zone:hover p {
+    color: #343a40 !important; /* Darker text for better contrast on light blue background */
+}
+
+.upload-drop-zone:focus-within {
+    border-color: #0056b3 !important;
+    outline: 3px solid #80bdff; /* Visible focus indicator */
+    outline-offset: 2px;
+}
+
+/* Fix contrast for heading text in focus state */
+.upload-drop-zone:focus-within h3,
+.upload-drop-zone:focus-within .h4 {
+    color: #212529 !important;
+}
+
+/* Fix contrast for instructions text in focus state */
+.upload-drop-zone:focus-within p {
+    color: #343a40 !important;
+}
+
+.upload-drop-zone.drag-over {
+    border-color: #0056b3 !important;
+    background-color: #cce7ff;
+    transform: scale(1.02);
+}
+
+/* Fix contrast for heading text in drag-over state */
+.upload-drop-zone.drag-over h3,
+.upload-drop-zone.drag-over .h4 {
+    color: #212529 !important; /* High contrast on blue background */
+}
+
+/* Fix contrast for instructions text in drag-over state */
+.upload-drop-zone.drag-over p {
+    color: #343a40 !important; /* Dark text for blue background */
+}
+
+/* File Queue Items */
+.file-queue-item {
+    border: 2px solid #6c757d; /* Stronger border for visibility */
+    border-radius: 0.375rem;
+    background-color: #fff;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    color: #212529; /* High contrast text */
+}
+
+/* Filename styling for better contrast */
+.file-queue-item h3.h6 {
+    color: #212529 !important; /* Ensure high contrast for filename */
+    font-weight: 600; /* Stronger font weight for readability */
+    margin-bottom: 0.25rem;
+    word-break: break-word; /* Allow long filenames to wrap */
+    overflow-wrap: break-word; /* Modern browsers */
+    line-height: 1.3; /* Compact but readable */
+}
+
+/* File size text styling */
+.file-queue-item .text-muted {
+    color: #495057 !important; /* Darker muted text for better contrast */
+}
+
+/* Override conversion status text color in converting state */
+.file-queue-item.converting .conversion-status span {
+    color: #495057 !important; /* Dark text for light blue background */
+}
+
+.file-queue-item.converting h3.h6 {
+    color: #212529 !important; /* Dark filename text for light blue background */
+}
+
+.file-queue-item.converting .text-muted {
+    color: #495057 !important; /* Dark text for light blue background */
+}
+
+/* Completed state text colors */
+.file-queue-item.completed h3.h6 {
+    color: #212529 !important; /* Dark filename text for light green background */
+}
+
+.file-queue-item.completed .text-muted,
+.file-queue-item.completed .conversion-status span {
+    color: #495057 !important; /* Dark text for light green background */
+}
+
+/* Error state text colors */
+.file-queue-item.error h3.h6 {
+    color: #212529 !important; /* Dark filename text for light red background */
+}
+
+.file-queue-item.error .text-muted {
+    color: #495057 !important; /* Dark text for light red background */
+}
+
+.file-queue-item:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15); /* Stronger shadow */
+    border-color: #495057;
+}
+
+.file-queue-item:focus-within {
+    outline: 3px solid #80bdff;
+    outline-offset: 2px;
+}
+
+.file-queue-item.converting {
+    border-color: #0056b3; /* Darker blue for contrast */
+    background-color: #f0f8ff;
+    border-left: 5px solid #0056b3; /* Visual indicator beyond color */
+}
+
+.file-queue-item.completed {
+    border-color: #146c3d; /* Darker green for contrast */
+    background-color: #f8fff8;
+    border-left: 5px solid #146c3d; /* Visual indicator beyond color */
+}
+
+.file-queue-item.error {
+    border-color: #c52a2a; /* Darker red for contrast */
+    background-color: #fff5f5;
+    border-left: 5px solid #c52a2a; /* Visual indicator beyond color */
+}
+
+/* Progress Bars */
+.progress {
+    height: 1.2rem;
+    margin-bottom: 0.5rem; /* Add space between progress bar and status badge */
+    overflow: hidden; /* Prevent text overflow */
+}
+
+.progress-bar {
+    transition: width 0.3s ease;
+    font-size: 0.75rem; /* Smaller text to fit better */
+    line-height: 1.2rem; /* Match progress bar height */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+}
+
+/* Conversion status styling */
+.conversion-status {
+    margin-top: 0.5rem !important; /* Add consistent spacing above status */
+    overflow: hidden; /* Prevent status text overflow */
+}
+
+.conversion-status span {
+    font-size: 0.875rem; /* Consistent readable size */
+    color: #495057 !important; /* Ensure good contrast */
+    word-break: break-word; /* Allow long text to wrap */
+    overflow-wrap: break-word; /* Modern browsers */
+    line-height: 1.4; /* Better readability for wrapped text */
+}
+
+/* File Icons */
+.file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+    font-weight: bold; /* Improve text visibility */
+    font-size: 1.2rem;
+}
+
+.file-icon.pdf {
+    background-color: #c52a2a; /* Darker red for contrast */
+    color: white;
+    border: 2px solid #991f1f; /* Additional visual distinction */
+}
+
+.file-icon.epub {
+    background-color: #5a2d8a; /* Darker purple for contrast */
+    color: white;
+    border: 2px solid #442269; /* Additional visual distinction */
+}
+
+.file-icon.cbz {
+    background-color: #146c3d; /* Darker green for contrast */
+    color: white;
+    border: 2px solid #0f5530; /* Additional visual distinction */
+}
+
+/* Note: Status badges removed - button states now provide all necessary status feedback */
+
+/* Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .upload-drop-zone {
+        padding: 2rem !important;
+    }
+    
+    .file-queue-item {
+        padding: 0.75rem;
+    }
+    
+    .file-queue-item .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    .file-queue-item .text-end {
+        text-align: center !important;
+        margin-top: 0.75rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .file-queue-item .flex-grow-1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .file-icon {
+        width: 36px;
+        height: 36px;
+        margin: 0 auto 0.5rem auto;
+    }
+    
+    /* Fix progress bar overflow on mobile */
+    .progress {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    /* Ensure buttons don't overflow */
+    .file-queue-item .btn {
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Stack buttons vertically on very small screens */
+    .file-queue-item .text-end {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .file-queue-item .btn {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    /* Fix convert all / clear queue button alignment on mobile */
+    .card-header .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    .card-header div:last-child {
+        margin-top: 0.75rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .card-header .btn {
+        flex: 1;
+        white-space: nowrap;
+    }
+}
+
+/* Focus Management for All Interactive Elements */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.btn:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    outline: 3px solid #80bdff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* Screen reader only text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Help Modal Accessibility Improvements */
+.modal-content {
+    background-color: #ffffff !important; /* Ensure white background */
+    color: #212529 !important; /* High contrast dark text */
+}
+
+.modal-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    color: #212529 !important; /* High contrast title */
+}
+
+.modal-body h5 {
+    color: #212529 !important; /* High contrast headings */
+    font-weight: 600;
+}
+
+.modal-body p, .modal-body li {
+    color: #495057 !important; /* Better contrast for body text */
+    line-height: 1.6; /* Improved readability */
+}
+
+.modal-body code {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.modal-body pre {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+    border: 1px solid #dee2e6;
+}
+
+.modal-body .btn-primary {
+    background-color: #0056b3 !important; /* High contrast button */
+    border-color: #004494 !important;
+}
+
+/* Improved form text sizing */
+.form-text {
+    font-size: 0.875rem; /* Increased from default smaller size */
+    color: #495057; /* Better contrast than default muted */
+}
+
+/* High contrast buttons */
+.btn-primary {
+    background-color: #0056b3; /* Darker blue for better contrast */
+    border-color: #004494;
+}
+
+.btn-primary:hover {
+    background-color: #004494;
+    border-color: #003d7a;
+}
+
+.btn-success {
+    background-color: #146c3d; /* Darker green for better contrast */
+    border-color: #0f5530;
+}
+
+.btn-success:hover {
+    background-color: #0f5530;
+    border-color: #0a3d23;
+}
+
+.btn-outline-secondary {
+    color: #495057; /* Better contrast */
+    border-color: #495057;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #495057;
+    border-color: #495057;
+    color: #fff;
+}
+
+/* Progress bar improvements */
+.progress-bar {
+    background-color: #0056b3; /* Higher contrast blue */
+}
+
+/* Dark mode support with improved contrast */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    .card {
+        background-color: #1e1e1e;
+        border-color: #333;
+        color: #e0e0e0;
+    }
+    
+    .file-queue-item {
+        background-color: #1e1e1e;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    
+    /* Dark mode filename and text contrast */
+    .file-queue-item h3.h6 {
+        color: #f8f9fa !important; /* High contrast white for dark mode */
+    }
+    
+    .file-queue-item .text-muted {
+        color: #adb5bd !important; /* Lighter muted text for dark backgrounds */
+    }
+    
+    .conversion-status span {
+        color: #adb5bd !important; /* Good contrast for dark mode */
+    }
+    
+    .upload-drop-zone {
+        background-color: #1e1e1e;
+        border-color: #555 !important;
+        color: #e0e0e0;
+    }
+    
+    /* Dark mode contrast fixes for upload zone */
+    .upload-drop-zone p {
+        color: #c0c0c0 !important; /* Better contrast in dark mode */
+    }
+    
+    .upload-drop-zone:hover {
+        background-color: #2a2a3a;
+    }
+    
+    .upload-drop-zone:hover h3,
+    .upload-drop-zone:hover .h4,
+    .upload-drop-zone:hover p {
+        color: #e0e0e0 !important; /* High contrast in dark hover state */
+    }
+    
+    .upload-drop-zone.drag-over {
+        background-color: #1a2a4a;
+    }
+    
+    .upload-drop-zone.drag-over h3,
+    .upload-drop-zone.drag-over .h4,
+    .upload-drop-zone.drag-over p {
+        color: #e0e0e0 !important; /* High contrast in dark drag state */
+    }
+    
+    .form-control,
+    .form-select {
+        background-color: #2a2a2a;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+    
+    .form-control:focus,
+    .form-select:focus {
+        background-color: #2a2a2a;
+        border-color: #80bdff;
+        color: #e0e0e0;
+    }
+    
+    .form-text {
+        color: #b0b0b0;
+    }
+}

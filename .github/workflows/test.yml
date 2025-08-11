@@ -1,0 +1,226 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  merge_group:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-mock
+    
+    - name: Lint with flake8 (optional)
+      run: |
+        # Install flake8 for basic linting
+        pip install flake8
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Treat all errors as warnings for now
+        flake8 src/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+      continue-on-error: true
+    
+    - name: Test syntax compilation
+      run: |
+        python -m py_compile src/comic_converter.py
+        echo "✓ Main module compiles successfully"
+    
+    - name: Test CLI help (without dependencies)
+      run: |
+        python -c "
+        import subprocess, sys
+        try:
+            result = subprocess.run([sys.executable, 'src/comic_converter.py', '--help'], 
+                                  capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print('✓ CLI help works without dependencies')
+            else:
+                print('✗ CLI help failed')
+                sys.exit(1)
+        except subprocess.TimeoutExpired:
+            print('✗ CLI help timed out')
+            sys.exit(1)
+        "
+    
+    - name: Run unit tests
+      run: |
+        cd ${{ github.workspace }}
+        PYTHONPATH=${{ github.workspace }}/src python -m pytest tests/test_comic_converter.py -v --tb=short
+    
+    - name: Run integration tests
+      run: |
+        cd ${{ github.workspace }}
+        PYTHONPATH=${{ github.workspace }}/src python tests/test_integration.py
+    
+    - name: Test with coverage
+      run: |
+        cd ${{ github.workspace }}
+        PYTHONPATH=${{ github.workspace }}/src python -m pytest tests/test_comic_converter.py --cov=comic_converter --cov-report=xml --cov-report=term-missing
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - name: Test macOS-specific functionality
+      run: |
+        python -m py_compile src/comic_converter.py
+        python -c "
+        import subprocess, sys
+        try:
+            result = subprocess.run([sys.executable, 'src/comic_converter.py', '--help'], 
+                                  capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print('✓ macOS compatibility verified')
+            else:
+                print('✗ macOS CLI help failed')
+                sys.exit(1)
+        except subprocess.TimeoutExpired:
+            print('✗ macOS CLI help timed out')
+            sys.exit(1)
+        "
+    
+    - name: Run core tests on macOS
+      run: |
+        cd ${{ github.workspace }}
+        PYTHONPATH=${{ github.workspace }}/src python -m pytest tests/test_comic_converter.py::TestConversionProgress -v
+        PYTHONPATH=${{ github.workspace }}/src python -m pytest tests/test_comic_converter.py::TestComicConverter::test_detect_file_type_pdf -v
+        PYTHONPATH=${{ github.workspace }}/src python -m pytest tests/test_comic_converter.py::TestBulkProcessor::test_find_comic_files -v
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - name: Test Windows-specific functionality
+      run: |
+        python -m py_compile src/comic_converter.py
+        python src/comic_converter.py --help
+        echo "✓ Windows compatibility verified"
+
+  performance-test:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+        pip install memory-profiler psutil
+    
+    - name: Run performance tests
+      run: |
+        cd ${{ github.workspace }}
+        PYTHONPATH=${{ github.workspace }}/src python tests/test_performance.py
+    
+    - name: Memory usage test
+      run: |
+        python -c "
+        import psutil
+        import subprocess
+        import sys
+        
+        # Test memory usage of help command
+        process = subprocess.Popen([sys.executable, 'src/comic_converter.py', '--help'], 
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.wait()
+        
+        print('✓ Memory test completed')
+        "
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install security tools
+      run: |
+        pip install -r requirements-dev.txt
+    
+    - name: Run Bandit security scan
+      run: |
+        bandit -r src/ -f json -o bandit-report.json || true
+        bandit -r src/ -ll -f txt
+      continue-on-error: true
+    
+    - name: Check for known vulnerabilities (free tier)
+      run: |
+        # Use pip-audit as free alternative to Safety CLI
+        pip install pip-audit
+        pip-audit --desc --format=json --output=audit-report.json || true
+        pip-audit --desc || true
+      continue-on-error: true

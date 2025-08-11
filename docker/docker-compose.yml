@@ -1,0 +1,25 @@
+# Docker Compose for CBZify development
+
+services:
+  cbzify-web:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount volumes for persistent file storage
+      - ./test-uploads:/app/uploads
+      - ./test-downloads:/app/downloads
+      # Mount source code for development
+      - ./src/comic_converter.py:/app/comic_converter.py
+      - ./web/app.py:/app/app.py
+      - ./web/templates:/app/templates
+      - ./web/static:/app/static
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
