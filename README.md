@@ -8,6 +8,10 @@ CBZify is a powerful comic conversion tool that converts EPUB and PDF files to C
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=for-the-badge)](LICENSE)
 
+## AI disclaimer
+
+This project was built as a personal test of AI driven development tools, evolving a basic human-generated python script into a more robust, performant and featureful tool. A human was in the loop throughout the creation of this project.
+
 ## ✨ Key Features
 
 - 🧠 **Smart PDF Analysis**: Detects text overlays and chooses optimal conversion method
